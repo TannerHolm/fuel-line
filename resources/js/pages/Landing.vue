@@ -45,10 +45,13 @@ const qty = (t: Tier) => (t.max_qty ? `${t.min_qty}–${t.max_qty}` : `${t.min_q
             </div>
         </section>
 
-        <!-- Tan strip -->
-        <div class="flex items-center gap-6 bg-ff-tan px-5 py-2.5 text-ink sm:px-10">
-            <span class="ff-label tracking-[0.22em]">The give-back</span>
-            <span class="text-[13px] leading-snug">A portion of every purchase supports American veterans, first responders, and military families.</span>
+        <!-- Tan strip — the give-back is the brand's reason to exist, so it
+             gets its own centered beat rather than a one-line footnote. -->
+        <div class="bg-ff-tan px-5 py-10 text-center text-ink sm:px-10 sm:py-14">
+            <div class="ff-label tracking-[0.24em]">The give-back</div>
+            <p class="mx-auto mt-4 max-w-3xl text-[20px] leading-snug sm:text-[26px]">
+                A portion of every purchase supports American veterans, first responders, and military families.
+            </p>
         </div>
 
         <!-- Pricing -->
