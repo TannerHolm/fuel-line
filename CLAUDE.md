@@ -61,6 +61,26 @@ clipped text in fixed-height boxes. The `@font-face` carries `ascent-override: 9
 - One notched (`ff-notch`) hero plate per screen, max. Headlines uppercase. No emoji, no
   exclamation points. Errors state the fix, not the feeling.
 
+## Production (Laravel Forge)
+
+Server `harc-pro` (68.183.250.144, Ubuntu 24.04, PHP 8.4, **MySQL 8.4** — hence the portable SQL),
+alongside voting.freedomfuel.us. Site id 3359355, currently served at
+https://fuel-line-6t1sdaon.on-forge.com; the intended public domain is **wholesale.freedomfuel.us**
+(client-facing: partners sign up, order, and sign the buyback there), pending an A record →
+68.183.250.144 and adding the domain in Forge's Domains tab + SSL.
+
+- Deploys from `TannerHolm/fuel-line:main`, push-to-deploy ON. Forge's stock zero-downtime script
+  already runs composer install, npm run build, artisan optimize, storage:link, migrate --force.
+- Database `fuel_line` (user `forge`). Scheduler installed (`schedule:run` every minute) so the
+  nightly KPI snapshots run.
+- Seeding in production: `php artisan db:seed --class=PricingTierSeeder --force` (tiers only).
+  Founder logins come from `php artisan fuelline:make-founder`, which PROMPTS for the password —
+  run it from Forge's site terminal, not the Commands box (that box is non-interactive, and a
+  password typed there would land in Forge's command log).
+- Forge's Commands box eats backslashes and single quotes: use unqualified seeder class names.
+- After editing the env in Forge, the config cache is stale until the next deploy (or
+  `artisan optimize`) — the Cache toggle on the Environment page automates this.
+
 ## Route map
 
 - `/` landing (public pricing + signup CTA; authed users redirect by role)
