@@ -143,6 +143,44 @@ class ShopifyTest extends TestCase
         $this->assertSame(2, Account::whereNotNull('shopify_customer_id')->count());
     }
 
+    public function test_company_without_an_address_falls_back_to_its_order_address(): void
+    {
+        $this->configureShopify();
+
+        Http::fake([
+            'test-store.myshopify.com/*' => Http::response(['data' => ['companies' => [
+                'pageInfo' => ['hasNextPage' => false, 'endCursor' => null],
+                'nodes' => [[
+                    'id' => 'gid://shopify/Company/900',
+                    'name' => 'MVP Distributing',
+                    'createdAt' => '2026-07-18T00:00:00Z',
+                    'note' => null,
+                    'mainContact' => ['customer' => ['legacyResourceId' => '77', 'email' => 'conner@mvp.example',
+                        'firstName' => 'Connor', 'lastName' => 'Bates', 'phone' => null]],
+                    // Company profile left blank, as wholesale buyers often do.
+                    'locations' => ['nodes' => [['phone' => null, 'shippingAddress' => null, 'billingAddress' => null]]],
+                    'orders' => ['nodes' => [[
+                        'legacyResourceId' => '5555', 'name' => '#1012',
+                        'createdAt' => '2026-07-22T18:37:31Z',
+                        'displayFinancialStatus' => 'PAID', 'displayFulfillmentStatus' => 'FULFILLED',
+                        'currentSubtotalPriceSet' => ['shopMoney' => ['amount' => '250.00']],
+                        'subtotalLineItemsQuantity' => 35,
+                        'fulfillments' => [['createdAt' => '2026-07-23T00:00:00Z']],
+                        'shippingAddress' => ['city' => 'Meridian', 'provinceCode' => 'ID', 'phone' => '208-555-0100'],
+                        'billingAddress' => null,
+                    ]]],
+                ]],
+            ]]]),
+        ]);
+
+        $this->artisan('fuelline:shopify-import')->assertSuccessful();
+
+        $account = Account::where('shopify_company_id', '900')->firstOrFail();
+        $this->assertSame('Meridian', $account->city);
+        $this->assertSame('ID', $account->state);
+        $this->assertSame('208-555-0100', $account->phone);
+    }
+
     public function test_oauth_callback_verifies_state_and_hmac_then_stores_the_token(): void
     {
         config([

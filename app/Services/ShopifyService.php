@@ -115,6 +115,8 @@ class ShopifyService
                                 currentSubtotalPriceSet { shopMoney { amount } }
                                 subtotalLineItemsQuantity
                                 fulfillments { createdAt }
+                                shippingAddress { city provinceCode phone }
+                                billingAddress { city provinceCode phone }
                             }
                         }
                     }

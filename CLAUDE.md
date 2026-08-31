@@ -121,8 +121,9 @@ CONNECTED (Aug 31 2026) to the live store. Canonical domain is `nrk5i9-j6.myshop
 
 Import selection: the store has no `wholesale` tag and almost no company fields, so
 `--min-units=25` (the plan's wholesale minimum) is what separates retailers from DTC consumers.
-Business name / city / state / phone come from the ORDER's shipping address, not the customer
-profile — wholesale buyers leave the profile blank. Imported so far: MVP Distributing (Meridian ID),
+Address fallback: wholesale buyers routinely leave the company/customer profile blank, so both
+import paths fall back to the ORDER's shipping address for city/state/phone (this is what pins
+MVP Distributing, whose company record has no address at all). Imported so far: MVP Distributing (Meridian ID),
 Fasteddys (Meridian ID), Hammer Lane Market & Deli (North Bend WA).
 
 KNOWN GAPS: (1) only the last 60 days of orders are visible — the app lacks `read_all_orders`, so

@@ -150,9 +150,19 @@ class ShopifyImport extends Command
 
         $location = $company['locations']['nodes'][0] ?? [];
         $address = $location['shippingAddress'] ?? $location['billingAddress'] ?? [];
-        $city = $address['city'] ?? null;
-        $state = $address['zoneCode'] ?? null;
-        $phone = ($contact['phone'] ?? null) ?: (($location['phone'] ?? null) ?: ($address['phone'] ?? null));
+
+        // Wholesale buyers routinely leave the company profile blank but always
+        // give an address when they order — fall back to the order's.
+        $orderAddress = collect($company['orders']['nodes'] ?? [])
+            ->sortByDesc('createdAt')
+            ->map(fn ($o) => $o['shippingAddress'] ?? $o['billingAddress'] ?? null)
+            ->first(fn ($a) => filled($a['city'] ?? null)) ?? [];
+
+        $city = ($address['city'] ?? null) ?: ($orderAddress['city'] ?? null);
+        $state = ($address['zoneCode'] ?? null) ?: ($orderAddress['provinceCode'] ?? null);
+        $phone = ($contact['phone'] ?? null)
+            ?: (($location['phone'] ?? null)
+            ?: (($address['phone'] ?? null) ?: ($orderAddress['phone'] ?? null)));
 
         $account = Account::where('shopify_company_id', $companyId)->first()
             ?? ($email ? Account::whereRaw('lower(email) = ?', [mb_strtolower($email)])->first() : null)
