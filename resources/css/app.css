@@ -1,0 +1,305 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   FREEDOM FUEL — brand faces (self-hosted)
+   Norwester: structural + numeric. Gotcha Gothic: prose.
+   Thedus Condensed: dense labels / table headers.
+   ============================================================ */
+@font-face {
+    font-family: 'Norwester';
+    src: url('/fonts/Norwester.woff') format('woff'), url('/fonts/Norwester.ttf') format('truetype');
+    font-weight: 400 700;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Gotcha Gothic';
+    src: url('/fonts/GotchaGothic-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-display: swap;
+    /* The shipped font declares ascent 0.60em / descent 0.10em, but its glyphs
+       actually reach 0.83em above and 0.23em below the baseline. Browsers size
+       and clip line boxes from the declared metrics, which shaved the tops and
+       descenders off text in any fixed-height box (inputs especially).
+       Override with the measured values. */
+    ascent-override: 95%;
+    descent-override: 25%;
+    line-gap-override: 0%;
+}
+@font-face {
+    font-family: 'Thedus Condensed';
+    src: url('/fonts/ThedusCondensedLight-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Thedus Condensed';
+    src: url('/fonts/ThedusCondensedLight-Bold.otf') format('opentype');
+    font-weight: 700;
+    font-display: swap;
+}
+
+body,
+html {
+    --font-sans: 'Gotcha Gothic', 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ============================================================
+   Theme tokens. Dark surface is canonical — no light mode.
+   Starter-kit component vars are mapped onto Freedom Fuel color.
+   ============================================================ */
+@layer base {
+    :root,
+    .dark {
+        --background: 223 21% 6.5%; /* --ff-black #0D0F14 */
+        --foreground: 0 0% 100%;
+        --card: 222 22% 9%; /* --bg-elevated #12151C */
+        --card-foreground: 0 0% 100%;
+        --popover: 222 22% 9%;
+        --popover-foreground: 0 0% 100%;
+        --primary: 0 0% 100%; /* white is the primary button */
+        --primary-foreground: 223 21% 6.5%;
+        --secondary: 219 21% 13%; /* --ff-charcoal #1A1F28 */
+        --secondary-foreground: 0 0% 100%;
+        --muted: 219 21% 13%;
+        --muted-foreground: 220 2% 58%; /* white @ .55 on ink */
+        --accent: 219 21% 13%;
+        --accent-foreground: 0 0% 100%;
+        --destructive: 355 78% 56%; /* --ff-red-bright #E63946 */
+        --destructive-foreground: 0 0% 100%;
+        --border: 228 4% 23%; /* white @ .18 on ink */
+        --input: 228 4% 23%;
+        --ring: 355 78% 56%;
+        --radius: 0.25rem;
+        --sidebar-background: 222 22% 9%;
+        --sidebar-foreground: 0 0% 100%;
+        --sidebar-primary: 0 0% 100%;
+        --sidebar-primary-foreground: 223 21% 6.5%;
+        --sidebar-accent: 219 21% 13%;
+        --sidebar-accent-foreground: 0 0% 100%;
+        --sidebar-border: 228 4% 23%;
+        --sidebar-ring: 355 78% 56%;
+    }
+
+    html {
+        @apply bg-ink text-white;
+    }
+
+    body {
+        font-family: 'Gotcha Gothic', 'Inter', ui-sans-serif, system-ui, sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    ::selection {
+        background: #c8102e;
+        color: #fff;
+    }
+
+    /* Form controls inherit the body's 1.6 line-height, which overflows a
+       fixed-height field and clips Gotcha Gothic's descenders. Give them a
+       line box that fits. */
+    input,
+    textarea,
+    select,
+    button {
+        line-height: 1.35;
+    }
+}
+
+/* ============================================================
+   App-specific primitives from the App Style Guide.
+   ============================================================ */
+@layer components {
+    /* Type roles */
+    .ff-display {
+        font-family: 'Norwester', 'Inter', Impact, sans-serif;
+        text-transform: uppercase;
+        line-height: 1;
+        letter-spacing: 0;
+    }
+    .ff-label {
+        font-family: 'Thedus Condensed', 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+    }
+    .ff-label-sm {
+        font-family: 'Thedus Condensed', 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 10px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+    }
+    .ff-mono {
+        font-family: 'JetBrains Mono', 'Courier New', monospace;
+        font-size: 13px;
+    }
+
+    /* Buttons — white is primary; red gradient is the single commit action */
+    .ff-btn {
+        @apply inline-flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-[14px] border-0 px-6 py-[15px] font-bold uppercase leading-none;
+        font-family: 'Gotcha Gothic', 'Inter', sans-serif;
+        font-size: 14px;
+        letter-spacing: 0.06em;
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+        transition:
+            background-color 125ms cubic-bezier(0, 0, 0.2, 1),
+            color 125ms cubic-bezier(0, 0, 0.2, 1),
+            border-color 125ms cubic-bezier(0, 0, 0.2, 1),
+            filter 125ms cubic-bezier(0, 0, 0.2, 1);
+    }
+    .ff-btn:focus-visible {
+        outline: 2px solid #e63946;
+        outline-offset: 2px;
+    }
+    .ff-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+    .ff-btn-primary {
+        @apply bg-white text-ink;
+    }
+    .ff-btn-primary:hover:not(:disabled) {
+        @apply bg-ink text-white;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+    }
+    .ff-btn-secondary {
+        @apply border border-white bg-transparent text-white;
+        border-width: 1px;
+        box-shadow: none;
+    }
+    .ff-btn-secondary:hover:not(:disabled) {
+        background: rgba(255, 255, 255, 0.08);
+    }
+    .ff-btn-cta {
+        background: linear-gradient(90deg, #7a0e20 0%, #e63946 100%);
+        color: #fff;
+        letter-spacing: 0.1em;
+    }
+    .ff-btn-cta:hover:not(:disabled) {
+        filter: brightness(1.08);
+    }
+    .ff-btn-cta:active:not(:disabled) {
+        background: #7a0e20;
+        transform: translateY(1px);
+    }
+    .ff-btn-ghost {
+        @apply min-h-0 rounded-[14px] border bg-transparent px-4 py-[9px];
+        font-family: 'Thedus Condensed', 'Inter', sans-serif;
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        color: rgba(255, 255, 255, 0.72);
+        border-color: rgba(255, 255, 255, 0.18);
+        box-shadow: none;
+        padding-top: 9px;
+        padding-bottom: 9px;
+    }
+    .ff-btn-ghost:hover:not(:disabled) {
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.35);
+    }
+    .ff-btn-destructive {
+        @apply min-h-0 rounded-[14px] border bg-transparent px-4;
+        font-family: 'Thedus Condensed', 'Inter', sans-serif;
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        color: #e63946;
+        border-color: rgba(230, 57, 70, 0.55);
+        box-shadow: none;
+        padding-top: 9px;
+        padding-bottom: 9px;
+    }
+    .ff-btn-destructive:hover:not(:disabled) {
+        background: rgba(230, 57, 70, 0.1);
+    }
+
+    /* Inputs — 4px radius, ink-sunken field on elevated card */
+    .ff-field-label {
+        @apply block;
+        font-family: 'Thedus Condensed', 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.72);
+    }
+    .ff-input {
+        @apply w-full rounded border bg-ink text-white;
+        font-family: 'Gotcha Gothic', 'Inter', sans-serif;
+        font-size: 14px;
+        line-height: 1.35;
+        border-color: rgba(255, 255, 255, 0.18);
+        padding: 11px 14px;
+        min-height: 44px;
+        outline: none;
+        transition: border-color 125ms cubic-bezier(0, 0, 0.2, 1);
+    }
+    .ff-input:focus {
+        border-color: #e63946;
+        box-shadow: 0 0 0 1px #e63946;
+    }
+    .ff-input-numeric {
+        font-family: 'Norwester', 'Inter', sans-serif;
+        font-size: 18px;
+    }
+
+    /* Compact variant for filter bars. Sized so the line box still fits —
+       Chrome ignores line-height on <select>, so the content box has to be
+       tall enough on its own. */
+    .ff-input-sm {
+        font-size: 13px;
+        padding: 9px 12px;
+        min-height: 38px;
+    }
+    .ff-error {
+        font-size: 13px;
+        line-height: 1.4;
+        color: #e63946;
+    }
+
+    /* Surfaces */
+    .ff-card {
+        @apply border bg-elevated;
+        border-color: rgba(255, 255, 255, 0.18);
+    }
+    .ff-hairline {
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    .ff-notch {
+        clip-path: polygon(22px 0, 100% 0, 100% calc(100% - 22px), calc(100% - 22px) 100%, 0 100%, 0 22px);
+    }
+
+    /* Status dot + label — never a filled chip */
+    .ff-status {
+        @apply inline-flex items-center gap-2;
+        font-family: 'Thedus Condensed', 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 10px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+    }
+    .ff-dot {
+        @apply block h-1.5 w-1.5 rounded-full;
+        background: currentColor;
+    }
+
+    .ff-scrim {
+        background: rgba(0, 0, 0, 0.72);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
