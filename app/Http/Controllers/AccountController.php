@@ -24,11 +24,7 @@ class AccountController extends Controller
         $accounts = Account::query()
             ->with('owner:id,name')
             ->withCount(['orders', 'checkIns'])
-            ->when($q, fn ($query) => $query->where(function ($query) use ($q) {
-                $query->where('name', 'ilike', "%{$q}%")
-                    ->orWhere('city', 'ilike', "%{$q}%")
-                    ->orWhere('decision_maker', 'ilike', "%{$q}%");
-            }))
+            ->search($q)
             ->orderBy('name')
             ->get()
             ->map(fn (Account $a) => [

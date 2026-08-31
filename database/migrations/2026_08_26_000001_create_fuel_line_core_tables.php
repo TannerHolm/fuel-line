@@ -110,7 +110,7 @@ return new class extends Migration
             $table->string('cadence', 10)->default('adhoc'); // 7 | 14 | 30 | adhoc
             $table->unsignedInteger('units_sold')->nullable();   // since last check-in
             $table->unsignedInteger('units_on_hand')->nullable();
-            $table->jsonb('flavors_moving')->nullable();
+            $table->json('flavors_moving')->nullable();
             $table->boolean('staff_recommends')->nullable();
             $table->text('buyer_profile')->nullable();
             $table->text('objections')->nullable();

@@ -19,12 +19,8 @@ class PipelineController extends Controller
             ->when($filters['retailer_type'] ?? null, fn ($q, $v) => $q->where('retailer_type', $v))
             ->when($filters['engine'] ?? null, fn ($q, $v) => $q->where('acquisition_engine', $v))
             ->when($filters['state'] ?? null, fn ($q, $v) => $q->where('state', $v))
-            ->when($filters['q'] ?? null, fn ($q, $v) => $q->where(function ($q) use ($v) {
-                $q->where('name', 'ilike', "%{$v}%")
-                    ->orWhere('city', 'ilike', "%{$v}%")
-                    ->orWhere('decision_maker', 'ilike', "%{$v}%");
-            }))
-            ->orderByRaw('next_action_date asc nulls last')
+            ->search($filters['q'] ?? null)
+            ->byNextAction()
             ->get();
 
         $board = collect(PipelineStage::ordered())->map(fn (PipelineStage $stage) => [

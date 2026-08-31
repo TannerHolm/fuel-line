@@ -19,10 +19,8 @@ class FieldController extends Controller
 
         $accounts = Account::query()
             ->where('pipeline_stage', '!=', 'lost')
-            ->when($q, fn ($query) => $query->where(function ($query) use ($q) {
-                $query->where('name', 'ilike', "%{$q}%")->orWhere('city', 'ilike', "%{$q}%");
-            }))
-            ->orderByRaw('next_action_date asc nulls last')
+            ->search($q, ['name', 'city'])
+            ->byNextAction()
             ->limit(60)
             ->get()
             ->map(fn (Account $a) => [

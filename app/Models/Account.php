@@ -87,6 +87,31 @@ class Account extends Model
         });
     }
 
+    /**
+     * Case-insensitive search that behaves the same on MySQL and Postgres
+     * (ILIKE is Postgres-only; MySQL's LIKE is collation-dependent).
+     */
+    public function scopeSearch(\Illuminate\Database\Eloquent\Builder $query, ?string $term, array $columns = ['name', 'city', 'decision_maker']): void
+    {
+        if (blank($term)) {
+            return;
+        }
+
+        $needle = '%'.mb_strtolower(trim($term)).'%';
+
+        $query->where(function ($query) use ($columns, $needle) {
+            foreach ($columns as $column) {
+                $query->orWhereRaw("LOWER({$column}) LIKE ?", [$needle]);
+            }
+        });
+    }
+
+    /** Soonest next action first, accounts with no date last — portable ordering. */
+    public function scopeByNextAction(\Illuminate\Database\Eloquent\Builder $query): void
+    {
+        $query->orderByRaw('next_action_date IS NULL')->orderBy('next_action_date');
+    }
+
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'owner_id');
