@@ -73,8 +73,13 @@ validation fail for the whole certificate.
 
 - Deploys from `TannerHolm/fuel-line:main`, push-to-deploy ON. Forge's stock zero-downtime script
   already runs composer install, npm run build, artisan optimize, storage:link, migrate --force.
-- Database `fuel_line` (user `forge`). Scheduler installed (`schedule:run` every minute) so the
-  nightly KPI snapshots run.
+- Database `fuel_line` (user `forge`). Scheduler installed (`schedule:run` every minute). Scheduled
+  jobs: `fuelline:compute-kpis` 02:00, `fuelline:shopify-import --exclude=Testing` hourly (catch-up
+  for what webhooks cannot see — new B2B companies have no order, so no webhook fires), and
+  `fuelline:geocode` 02:30 to pin newly imported accounts.
+- Webhooks must be REGISTERED, not just routed: `php artisan fuelline:shopify-webhooks` (idempotent;
+  re-points stale subscriptions after a domain change, refuses a non-HTTPS APP_URL). Nothing fires
+  until this is run — it was the reason orders/paid and orders/fulfilled were silently dead.
 - Seeding in production: `php artisan db:seed --class=PricingTierSeeder --force` (tiers only).
   Founder logins come from `php artisan fuelline:make-founder`. Default mode PROMPTS for the
   password (run it from Forge's site terminal). For the non-interactive Commands box use
