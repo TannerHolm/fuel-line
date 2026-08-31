@@ -76,9 +76,11 @@ validation fail for the whole certificate.
 - Database `fuel_line` (user `forge`). Scheduler installed (`schedule:run` every minute) so the
   nightly KPI snapshots run.
 - Seeding in production: `php artisan db:seed --class=PricingTierSeeder --force` (tiers only).
-  Founder logins come from `php artisan fuelline:make-founder`, which PROMPTS for the password —
-  run it from Forge's site terminal, not the Commands box (that box is non-interactive, and a
-  password typed there would land in Forge's command log).
+  Founder logins come from `php artisan fuelline:make-founder`. Default mode PROMPTS for the
+  password (run it from Forge's site terminal). For the non-interactive Commands box use
+  `--link --name="..." --email=...`: it sets a random password nobody sees and prints a one-time
+  password-reset URL (60 min, single use) for the founder to choose their own. Never type a
+  password into the Commands box — it is stored in Forge's command log.
 - Forge's Commands box eats backslashes and single quotes: use unqualified seeder class names.
 - After editing the env in Forge, the config cache is stale until the next deploy (or
   `artisan optimize`) — the Cache toggle on the Environment page automates this.
