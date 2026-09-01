@@ -78,26 +78,26 @@ const typeShort: Record<string, string> = { service: 'SVC', performance: 'PERF',
             <Link href="/accounts/create" class="ff-btn ff-btn-primary no-underline">New account</Link>
         </div>
 
-        <div class="mb-5 flex flex-wrap items-center gap-3">
+        <div class="mb-5 grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:items-center sm:gap-3">
             <input
                 v-model="q"
                 type="text"
                 placeholder="Search name, city, contact"
-                class="ff-input ff-input-sm w-60"
+                class="ff-input ff-input-sm w-full sm:w-60"
                 @keyup.enter="applyFilters"
             />
-            <select v-model="retailerType" class="ff-input ff-input-sm w-auto" @change="applyFilters">
+            <select v-model="retailerType" class="ff-input ff-input-sm w-full sm:w-auto" @change="applyFilters">
                 <option value="">All types</option>
                 <option value="service">Service</option>
                 <option value="performance">Performance</option>
                 <option value="convenience">Convenience</option>
             </select>
-            <select v-model="engine" class="ff-input ff-input-sm w-auto" @change="applyFilters">
+            <select v-model="engine" class="ff-input ff-input-sm w-full sm:w-auto" @change="applyFilters">
                 <option value="">Both engines</option>
                 <option value="direct">Direct outbound</option>
                 <option value="seeded">Demand-seeded</option>
             </select>
-            <select v-model="state" class="ff-input ff-input-sm w-auto" @change="applyFilters">
+            <select v-model="state" class="ff-input ff-input-sm w-full sm:w-auto" @change="applyFilters">
                 <option value="">All states</option>
                 <option v-for="s in states" :key="s" :value="s">{{ s }}</option>
             </select>
@@ -106,12 +106,12 @@ const typeShort: Record<string, string> = { service: 'SVC', performance: 'PERF',
             </button>
         </div>
 
-        <div class="-mx-5 overflow-x-auto px-5 pb-4 sm:-mx-8 sm:px-8">
+        <div class="ff-rail -mx-5 snap-x snap-mandatory scroll-pl-5 overflow-x-auto px-5 pb-4 sm:-mx-8 sm:snap-none sm:scroll-pl-0 sm:px-8">
             <div class="flex min-w-max gap-3">
                 <div
                     v-for="col in board"
                     :key="col.value"
-                    class="w-[248px] flex-none"
+                    class="w-[82vw] max-w-[248px] flex-none snap-start sm:w-[248px]"
                     @dragover.prevent="dragOver = col.value"
                     @dragleave="dragOver === col.value && (dragOver = null)"
                     @drop.prevent="onDrop(col.value)"

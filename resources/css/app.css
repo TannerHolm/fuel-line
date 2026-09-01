@@ -123,18 +123,22 @@ html {
         line-height: 1;
         letter-spacing: 0;
     }
+    /* Labels are Norwester, not Thedus Condensed Light: the Light face at
+       10-11px with 0.18em tracking was thin and genuinely hard to read,
+       especially on a phone. Norwester is the other brand face, has real
+       stroke weight at small sizes, and stays condensed and all-caps. */
     .ff-label {
-        font-family: 'Thedus Condensed', 'Inter', sans-serif;
-        font-weight: 700;
-        font-size: 11px;
-        letter-spacing: 0.18em;
+        font-family: 'Norwester', 'Inter', sans-serif;
+        font-weight: 400;
+        font-size: 13px;
+        letter-spacing: 0.11em;
         text-transform: uppercase;
     }
     .ff-label-sm {
-        font-family: 'Thedus Condensed', 'Inter', sans-serif;
-        font-weight: 700;
-        font-size: 10px;
-        letter-spacing: 0.18em;
+        font-family: 'Norwester', 'Inter', sans-serif;
+        font-weight: 400;
+        font-size: 11px;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
     }
     .ff-mono {
@@ -192,9 +196,9 @@ html {
     }
     .ff-btn-ghost {
         @apply min-h-0 rounded-[14px] border bg-transparent px-4 py-[9px];
-        font-family: 'Thedus Condensed', 'Inter', sans-serif;
-        font-size: 11px;
-        letter-spacing: 0.18em;
+        font-family: 'Norwester', 'Inter', sans-serif;
+        font-size: 12px;
+        letter-spacing: 0.11em;
         color: rgba(255, 255, 255, 0.72);
         border-color: rgba(255, 255, 255, 0.18);
         box-shadow: none;
@@ -207,8 +211,8 @@ html {
     }
     .ff-btn-destructive {
         @apply min-h-0 rounded-[14px] border bg-transparent px-4;
-        font-family: 'Thedus Condensed', 'Inter', sans-serif;
-        font-size: 11px;
+        font-family: 'Norwester', 'Inter', sans-serif;
+        font-size: 12px;
         letter-spacing: 0.18em;
         color: #e63946;
         border-color: rgba(230, 57, 70, 0.55);
@@ -223,12 +227,12 @@ html {
     /* Inputs — 4px radius, ink-sunken field on elevated card */
     .ff-field-label {
         @apply block;
-        font-family: 'Thedus Condensed', 'Inter', sans-serif;
-        font-weight: 700;
-        font-size: 11px;
-        letter-spacing: 0.2em;
+        font-family: 'Norwester', 'Inter', sans-serif;
+        font-weight: 400;
+        font-size: 13px;
+        letter-spacing: 0.11em;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.72);
+        color: rgba(255, 255, 255, 0.82);
     }
     .ff-input {
         @apply w-full rounded border bg-ink text-white;
@@ -258,6 +262,15 @@ html {
         padding: 9px 12px;
         min-height: 38px;
     }
+    /* Compact is a desktop affordance. On a phone these are thumb targets, so
+       they get the full 44px minimum back. */
+    @media (max-width: 639px) {
+        .ff-input-sm {
+            font-size: 14px;
+            padding: 12px 14px;
+            min-height: 44px;
+        }
+    }
     .ff-error {
         font-size: 13px;
         line-height: 1.4;
@@ -279,10 +292,10 @@ html {
     /* Status dot + label — never a filled chip */
     .ff-status {
         @apply inline-flex items-center gap-2;
-        font-family: 'Thedus Condensed', 'Inter', sans-serif;
-        font-weight: 700;
-        font-size: 10px;
-        letter-spacing: 0.16em;
+        font-family: 'Norwester', 'Inter', sans-serif;
+        font-weight: 400;
+        font-size: 11px;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
     }
     .ff-dot {
@@ -292,6 +305,15 @@ html {
 
     .ff-scrim {
         background: rgba(0, 0, 0, 0.72);
+    }
+
+    /* Horizontal rails on touch devices: momentum scroll, no visible bar. */
+    .ff-rail {
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .ff-rail::-webkit-scrollbar {
+        display: none;
     }
 }
 

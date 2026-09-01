@@ -73,7 +73,7 @@ function submit() {
                         <input id="name" v-model="form.name" type="text" class="ff-input" placeholder="Ridgeline Supply Co." />
                         <div v-if="form.errors.name" class="ff-error">{{ form.errors.name }}</div>
                     </div>
-                    <div class="grid grid-cols-3 gap-3">
+                    <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
                         <div class="col-span-2 flex flex-col gap-2">
                             <label class="ff-field-label" for="city">City</label>
                             <input id="city" v-model="form.city" type="text" class="ff-input" />
@@ -84,7 +84,7 @@ function submit() {
                             <div v-if="form.errors.state" class="ff-error">{{ form.errors.state }}</div>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                         <div class="flex flex-col gap-2">
                             <label class="ff-field-label" for="type">Retailer type</label>
                             <select id="type" v-model="form.retailer_type" class="ff-input">
@@ -108,7 +108,7 @@ function submit() {
                         <label class="ff-field-label" for="dm">Decision maker</label>
                         <input id="dm" v-model="form.decision_maker" type="text" class="ff-input" />
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                         <div class="flex flex-col gap-2">
                             <label class="ff-field-label" for="phone">Phone</label>
                             <input id="phone" v-model="form.phone" type="text" class="ff-input" />
@@ -126,7 +126,7 @@ function submit() {
                 </div>
 
                 <div class="ff-label-sm mb-4 mt-8 text-ff-tan-light">Acquisition</div>
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <div class="flex flex-col gap-2">
                         <label class="ff-field-label" for="source">Lead source</label>
                         <select id="source" v-model="form.lead_source" class="ff-input">
@@ -143,7 +143,7 @@ function submit() {
                 </div>
 
                 <div class="ff-label-sm mb-4 mt-8 text-ff-tan-light">Next action</div>
-                <div class="grid grid-cols-3 gap-3">
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
                     <div class="col-span-2 flex flex-col gap-2">
                         <label class="ff-field-label" for="na">What happens next</label>
                         <input id="na" v-model="form.next_action" type="text" class="ff-input" placeholder="Drop samples Thursday" />

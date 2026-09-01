@@ -148,14 +148,14 @@ onBeforeUnmount(() => {
                         · {{ unlocatedCount }} missing a city/state — run <span class="ff-mono text-[12px]">php artisan fuelline:geocode</span></template>.
                 </p>
             </div>
-            <div class="flex gap-3">
-                <select v-model="retailerType" class="ff-input ff-input-sm w-auto" @change="applyFilters">
+            <div class="grid w-full grid-cols-2 gap-2.5 sm:flex sm:w-auto sm:gap-3">
+                <select v-model="retailerType" class="ff-input ff-input-sm w-full sm:w-auto" @change="applyFilters">
                     <option value="">All types</option>
                     <option value="service">Service</option>
                     <option value="performance">Performance</option>
                     <option value="convenience">Convenience</option>
                 </select>
-                <select v-model="engine" class="ff-input ff-input-sm w-auto" @change="applyFilters">
+                <select v-model="engine" class="ff-input ff-input-sm w-full sm:w-auto" @change="applyFilters">
                     <option value="">Both engines</option>
                     <option value="direct">Direct outbound</option>
                     <option value="seeded">Demand-seeded</option>
@@ -164,7 +164,7 @@ onBeforeUnmount(() => {
         </div>
 
         <div class="ff-card overflow-hidden">
-            <div ref="mapEl" class="h-[calc(100vh-280px)] min-h-[420px] w-full"></div>
+            <div ref="mapEl" class="h-[60vh] min-h-[320px] w-full sm:h-[calc(100vh-280px)] sm:min-h-[420px]"></div>
         </div>
 
         <div class="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2">

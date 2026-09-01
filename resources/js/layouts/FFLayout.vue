@@ -36,11 +36,11 @@ const logout = () => router.post('/logout');
 <template>
     <div class="min-h-screen bg-ink text-white">
         <header class="sticky top-0 z-30 border-b border-white/[0.18] bg-ink/[0.82] backdrop-blur-md">
-            <div class="flex items-center justify-between gap-6 px-5 pt-3 sm:px-8">
-                <div class="flex flex-none items-center gap-4">
+            <div class="flex items-center justify-between gap-3 px-5 pt-3 sm:gap-6 sm:px-8">
+                <div class="flex min-w-0 flex-none items-center gap-3 sm:gap-4">
                     <img src="/images/logo-eagle-white.png" alt="" class="block h-7 w-auto" />
                     <div class="h-5 w-px bg-white/[0.18]"></div>
-                    <Link href="/pipeline" class="ff-display text-[17px] tracking-[0.06em] text-white no-underline">
+                    <Link href="/pipeline" class="ff-display flex items-center py-3 text-[17px] tracking-[0.06em] text-white no-underline sm:py-0">
                         Fuel Line
                     </Link>
                     <span class="ff-label-sm mt-px hidden text-white/40 md:block">Wholesale OS</span>
@@ -50,7 +50,7 @@ const logout = () => router.post('/logout');
                     <span class="ff-label hidden text-white/[0.55] sm:block">{{ user?.email }}</span>
                     <button
                         type="button"
-                        class="ff-display flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-full border border-white/[0.35] bg-transparent text-xs text-white"
+                        class="ff-display flex h-11 w-11 flex-none cursor-pointer items-center justify-center rounded-full border border-white/[0.35] bg-transparent text-sm text-white sm:h-[30px] sm:w-[30px] sm:text-xs"
                         @click="menuOpen = !menuOpen"
                     >
                         {{ initials }}
@@ -60,22 +60,22 @@ const logout = () => router.post('/logout');
                         v-if="menuOpen"
                         class="ff-card absolute right-0 top-11 z-50 w-48 py-1 shadow-[0_6px_24px_rgba(0,0,0,0.45)]"
                     >
-                        <Link href="/settings/profile" class="ff-label block px-4 py-2.5 text-white/[0.72] no-underline hover:bg-charcoal hover:text-white" @click="menuOpen = false">
+                        <Link href="/settings/profile" class="ff-label block px-4 py-3 text-white/[0.72] no-underline hover:bg-charcoal hover:text-white" @click="menuOpen = false">
                             Settings
                         </Link>
-                        <button type="button" class="ff-label block w-full cursor-pointer border-0 bg-transparent px-4 py-2.5 text-left text-white/[0.72] hover:bg-charcoal hover:text-white" @click="logout">
+                        <button type="button" class="ff-label block w-full cursor-pointer border-0 bg-transparent px-4 py-3 text-left text-white/[0.72] hover:bg-charcoal hover:text-white" @click="logout">
                             Sign out
                         </button>
                     </div>
                 </div>
             </div>
 
-            <nav class="flex gap-6 px-5 sm:px-8">
+            <nav class="ff-rail flex gap-5 overflow-x-auto px-5 sm:gap-6 sm:px-8">
                 <Link
                     v-for="tab in tabs"
                     :key="tab.href"
                     :href="tab.href"
-                    class="ff-label border-b-2 py-3 no-underline transition-colors duration-150"
+                    class="ff-label flex-none whitespace-nowrap border-b-2 py-3 no-underline transition-colors duration-150"
                     :class="isActive(tab.match) ? 'border-ff-red text-white' : 'border-transparent text-white/60 hover:text-white'"
                 >
                     {{ tab.label }}

@@ -44,20 +44,20 @@ const stageColor = (stage: string) =>
         </div>
 
         <div class="mb-4">
-            <input v-model="q" type="text" placeholder="Search name, city, contact" class="ff-input ff-input-sm w-72" @keyup.enter="search" />
+            <input v-model="q" type="text" placeholder="Search name, city, contact" class="ff-input ff-input-sm w-full sm:w-72" @keyup.enter="search" />
         </div>
 
         <div class="ff-card overflow-x-auto">
-            <table class="w-full min-w-[720px] border-collapse text-sm">
+            <table class="w-full border-collapse text-sm sm:min-w-[720px]">
                 <thead>
                     <tr class="border-b border-white/[0.18]">
                         <th class="ff-label-sm px-5 py-2.5 text-left text-white/[0.55]">Account</th>
-                        <th class="ff-label-sm px-5 py-2.5 text-left text-white/[0.55]">Location</th>
-                        <th class="ff-label-sm px-5 py-2.5 text-left text-white/[0.55]">Type</th>
+                        <th class="ff-label-sm hidden px-5 py-2.5 text-left text-white/[0.55] sm:table-cell">Location</th>
+                        <th class="ff-label-sm hidden px-5 py-2.5 text-left text-white/[0.55] lg:table-cell">Type</th>
                         <th class="ff-label-sm px-5 py-2.5 text-left text-white/[0.55]">Stage</th>
-                        <th class="ff-label-sm px-5 py-2.5 text-right text-white/[0.55]">Orders</th>
-                        <th class="ff-label-sm px-5 py-2.5 text-right text-white/[0.55]">Check-ins</th>
-                        <th class="ff-label-sm px-5 py-2.5 text-left text-white/[0.55]">Owner</th>
+                        <th class="ff-label-sm hidden px-5 py-2.5 text-right text-white/[0.55] md:table-cell">Orders</th>
+                        <th class="ff-label-sm hidden px-5 py-2.5 text-right text-white/[0.55] lg:table-cell">Check-ins</th>
+                        <th class="ff-label-sm hidden px-5 py-2.5 text-left text-white/[0.55] lg:table-cell">Owner</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -67,17 +67,22 @@ const stageColor = (stage: string) =>
                         class="cursor-pointer border-b border-white/[0.1] transition-colors duration-150 last:border-b-0 hover:bg-charcoal"
                         @click="router.visit(`/accounts/${a.id}`)"
                     >
-                        <td class="px-5 py-3 font-medium text-white">{{ a.name }}</td>
-                        <td class="px-5 py-3 text-white/[0.72]">{{ [a.city, a.state].filter(Boolean).join(', ') || '—' }}</td>
-                        <td class="ff-label px-5 py-3 text-white/[0.72]">{{ a.retailer_type ?? '—' }}</td>
+                        <td class="px-5 py-3 font-medium text-white">
+                            {{ a.name }}
+                            <span class="ff-label-sm mt-1 block text-white/[0.55] sm:hidden">
+                                {{ [a.city, a.state].filter(Boolean).join(', ') || '—' }}
+                            </span>
+                        </td>
+                        <td class="hidden px-5 py-3 text-white/[0.72] sm:table-cell">{{ [a.city, a.state].filter(Boolean).join(', ') || '—' }}</td>
+                        <td class="ff-label hidden px-5 py-3 text-white/[0.72] lg:table-cell">{{ a.retailer_type ?? '—' }}</td>
                         <td class="px-5 py-3">
                             <span class="ff-status" :class="stageColor(a.stage)">
                                 <span class="ff-dot"></span>{{ a.stage_label }}
                             </span>
                         </td>
-                        <td class="ff-display px-5 py-3 text-right text-base">{{ a.orders_count }}</td>
-                        <td class="ff-display px-5 py-3 text-right text-base">{{ a.check_ins_count }}</td>
-                        <td class="px-5 py-3 text-white/[0.72]">{{ a.owner?.split(' ')[0] ?? '—' }}</td>
+                        <td class="ff-display hidden px-5 py-3 text-right text-base md:table-cell">{{ a.orders_count }}</td>
+                        <td class="ff-display hidden px-5 py-3 text-right text-base lg:table-cell">{{ a.check_ins_count }}</td>
+                        <td class="hidden px-5 py-3 text-white/[0.72] lg:table-cell">{{ a.owner?.split(' ')[0] ?? '—' }}</td>
                     </tr>
                     <tr v-if="accounts.length === 0">
                         <td colspan="7" class="px-5 py-10 text-center text-white/[0.55]">

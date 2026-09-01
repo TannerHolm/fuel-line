@@ -40,7 +40,7 @@ const submit = () => {
                 <div v-if="form.errors.business_name" class="ff-error">{{ form.errors.business_name }}</div>
             </div>
 
-            <div class="grid grid-cols-3 gap-3">
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
                 <div class="col-span-2 flex flex-col gap-2">
                     <label class="ff-field-label" for="city">City</label>
                     <input id="city" v-model="form.city" type="text" class="ff-input" />
@@ -62,7 +62,7 @@ const submit = () => {
 
             <div class="ff-label-sm mt-3 text-ff-tan-light">Your login</div>
 
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div class="flex flex-col gap-2">
                     <label class="ff-field-label" for="name">Your name</label>
                     <input id="name" v-model="form.name" type="text" required autocomplete="name" class="ff-input" />
@@ -80,7 +80,7 @@ const submit = () => {
                 <div v-if="form.errors.email" class="ff-error">{{ form.errors.email }}</div>
             </div>
 
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div class="flex flex-col gap-2">
                     <label class="ff-field-label" for="password">Password</label>
                     <input id="password" v-model="form.password" type="password" required autocomplete="new-password" class="ff-input" />

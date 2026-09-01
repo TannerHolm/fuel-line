@@ -125,7 +125,7 @@ const submit = () => form.post('/portal/order');
                 </button>
                 <pre v-if="termsOpen" class="ff-mono mt-3 max-h-64 overflow-y-auto whitespace-pre-wrap border border-white/[0.1] bg-ink p-4 text-[11px] leading-relaxed text-white/[0.72]">{{ buybackTerms }}</pre>
 
-                <div class="mt-4 grid grid-cols-2 gap-3">
+                <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <div class="flex flex-col gap-2">
                         <label class="ff-field-label" for="signer">Full name (signature)</label>
                         <input id="signer" v-model="form.signer_name" type="text" class="ff-input" placeholder="Type your legal name" />

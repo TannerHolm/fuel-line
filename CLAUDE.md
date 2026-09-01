@@ -54,8 +54,18 @@ clipped text in fixed-height boxes. The `@font-face` carries `ascent-override: 9
 `descent-override: 25%` to correct it — don't remove those. Chrome also ignores `line-height` on
 `<select>`, so compact controls must get real height (that's what `ff-input-sm` is for).
 
-- Fonts: Norwester (structural/numeric), Gotcha Gothic (prose), Thedus Condensed (labels/table
-  headers), JetBrains Mono (IDs) — self-hosted in `public/fonts/`.
+- Fonts: Norwester (structural/numeric AND all labels/buttons), Gotcha Gothic (prose),
+  JetBrains Mono (IDs) — self-hosted in `public/fonts/`. The style guide originally assigned
+  labels to Thedus Condensed Light, but at 10-11px with 0.18em tracking that face was too thin
+  to read (worst on phones), so `ff-label`, `ff-label-sm`, `ff-status`, `ff-field-label` and the
+  small buttons moved to Norwester at 11-13px with tighter tracking. Thedus is now unused.
+  Norwester's metrics are sound (declares 0.88/0.17 against 0.80/0.10 of actual ink), so it
+  needs no override — unlike Gotcha Gothic below.
+- Mobile: `ff-input-sm` is compact only above 640px; on phones it returns to the 44px touch
+  minimum. Horizontal scrollers use `.ff-rail` (momentum scroll, no scrollbar); the pipeline
+  board additionally snaps with `scroll-pl-5` so a snapped column clears the page gutter.
+  Form field pairs stack below `sm`, and the accounts table sheds columns rather than forcing
+  a 720px sideways scroll.
 - White is the primary button; the red gradient (`ff-btn-cta`) is reserved for the single commit
   action on a screen. Status is a 6px dot + condensed caps label, never a filled chip.
 - One notched (`ff-notch`) hero plate per screen, max. Headlines uppercase. No emoji, no

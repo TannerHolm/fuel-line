@@ -116,13 +116,13 @@ function sparkline(key: keyof TrendPoint): string | null {
                 </p>
             </div>
             <div class="flex gap-3">
-                <select v-model="retailerType" class="ff-input ff-input-sm w-auto" @change="applyFilters">
+                <select v-model="retailerType" class="ff-input ff-input-sm w-full sm:w-auto" @change="applyFilters">
                     <option value="">All types</option>
                     <option value="service">Service</option>
                     <option value="performance">Performance</option>
                     <option value="convenience">Convenience</option>
                 </select>
-                <select v-model="engine" class="ff-input ff-input-sm w-auto" @change="applyFilters">
+                <select v-model="engine" class="ff-input ff-input-sm w-full sm:w-auto" @change="applyFilters">
                     <option value="">Both engines</option>
                     <option value="direct">Direct outbound</option>
                     <option value="seeded">Demand-seeded</option>
