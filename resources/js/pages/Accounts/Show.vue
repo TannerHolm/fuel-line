@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import FFModal from '@/components/FFModal.vue';
+import MessageThread, { type ThreadMessage } from '@/components/MessageThread.vue';
 import VelocityChart from '@/components/VelocityChart.vue';
 import FFLayout from '@/layouts/FFLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 
 interface TimelineItem {
-    kind: 'stage' | 'sample' | 'order' | 'check_in';
+    kind: 'stage' | 'sample' | 'order' | 'check_in' | 'message';
     date: string;
     title: string;
     detail: string | null;
@@ -28,6 +29,7 @@ interface Velocity {
 const props = defineProps<{
     account: Record<string, any>;
     velocity: Velocity;
+    thread: ThreadMessage[];
     timeline: TimelineItem[];
     stats: { total_units: number; total_revenue: number; units_sold_reported: number; last_check_in: string | null };
     stages: { value: string; label: string }[];
@@ -110,12 +112,14 @@ const kindColor: Record<string, string> = {
     sample: 'text-white/[0.72]',
     order: 'text-ff-success',
     check_in: 'text-ff-warning',
+    message: 'text-white/[0.55]',
 };
 const kindLabel: Record<string, string> = {
     stage: 'Stage',
     sample: 'Sample',
     order: 'Order',
     check_in: 'Check-in',
+    message: 'Message',
 };
 
 const stageIsHealthy = computed(() => ['selling', 'reordered', 'repeat_account'].includes(props.account.stage));
@@ -175,6 +179,14 @@ const money = (n: number) => '$' + n.toLocaleString('en-US', { minimumFractionDi
             <button type="button" class="ff-btn ff-btn-primary" @click="checkInOpen = true">Log check-in</button>
             <button type="button" class="ff-btn ff-btn-secondary" @click="sampleOpen = true">Log sample</button>
             <button type="button" class="ff-btn ff-btn-secondary" @click="orderOpen = true">Log order</button>
+        </div>
+
+        <!-- Conversation thread -->
+        <div id="messages" class="mb-5">
+            <MessageThread
+                :account="{ id: account.id, phone: account.phone, email: account.email, sms_opted_out: account.sms_opted_out }"
+                :thread="thread"
+            />
         </div>
 
         <!-- Sell-through velocity -->

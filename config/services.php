@@ -58,4 +58,23 @@ return [
         'scopes' => 'read_customers,write_customers,read_orders,write_draft_orders',
     ],
 
+    /*
+     * Two-way account messaging. Both services no-op safely (message rows go
+     * to "failed" with a clear error) until their keys are present.
+     */
+    'twilio' => [
+        'sid' => env('TWILIO_ACCOUNT_SID'),
+        'token' => env('TWILIO_AUTH_TOKEN'),
+        'messaging_service_sid' => env('TWILIO_MESSAGING_SERVICE_SID'),
+        'from' => env('TWILIO_FROM', '+13853508287'), // recorded as messages.from_address
+    ],
+
+    'sendgrid' => [
+        'key' => env('SENDGRID_API_KEY'),
+        'from_address' => env('SENDGRID_FROM_ADDRESS', 'sales@wholesale.freedomfuel.us'),
+        'from_name' => env('SENDGRID_FROM_NAME', 'Freedom Fuel'),
+        'reply_domain' => env('SENDGRID_REPLY_DOMAIN'), // e.g. reply.freedomfuel.us (Inbound Parse MX)
+        'inbound_token' => env('SENDGRID_INBOUND_TOKEN'), // random URL token; blank = inbound rejected
+    ],
+
 ];

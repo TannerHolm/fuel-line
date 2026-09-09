@@ -9,6 +9,10 @@ use App\Http\Controllers\SampleController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', \App\Http\Controllers\LandingController::class)->name('home');
+
+// Public legal pages — also the verifiable call-to-action for the A2P SMS campaign.
+Route::get('privacy', fn () => \Inertia\Inertia::render('Legal/Privacy'))->name('privacy');
+Route::get('terms', fn () => \Inertia\Inertia::render('Legal/Terms'))->name('terms');
 Route::get('dashboard', fn () => redirect()->route('pipeline'))->name('dashboard');
 
 // Investor scorecard — signed, expiring, read-only. No auth.
@@ -16,6 +20,11 @@ Route::get('scorecard', [\App\Http\Controllers\InvestorController::class, 'score
 
 // Shopify webhooks — HMAC-verified in the controller, CSRF-exempt in bootstrap/app.php.
 Route::post('webhooks/shopify', \App\Http\Controllers\ShopifyWebhookController::class)->name('webhooks.shopify');
+
+// Messaging webhooks — Twilio signature / URL token verified in the controllers, CSRF-exempt.
+Route::post('webhooks/twilio/inbound', \App\Http\Controllers\TwilioInboundWebhookController::class)->name('webhooks.twilio.inbound');
+Route::post('webhooks/twilio/status', \App\Http\Controllers\TwilioStatusWebhookController::class)->name('webhooks.twilio.status');
+Route::post('webhooks/sendgrid/inbound/{token}', \App\Http\Controllers\SendGridInboundWebhookController::class)->name('webhooks.sendgrid.inbound');
 
 // Wholesale-partner portal — scoped to the signed-in retailer's own account.
 Route::middleware(['auth', 'retailer'])->group(function () {
@@ -41,6 +50,10 @@ Route::middleware(['auth', 'founder'])->group(function () {
     Route::post('accounts/{account}/check-ins', [CheckInController::class, 'store'])->name('accounts.check-ins.store');
     Route::post('accounts/{account}/samples', [SampleController::class, 'store'])->name('accounts.samples.store');
     Route::post('accounts/{account}/orders', [OrderController::class, 'store'])->name('accounts.orders.store');
+
+    Route::get('messages', [\App\Http\Controllers\MessageController::class, 'index'])->name('messages.index');
+    Route::post('accounts/{account}/messages', [\App\Http\Controllers\MessageController::class, 'store'])->name('accounts.messages.store');
+    Route::post('accounts/{account}/messages/read', [\App\Http\Controllers\MessageController::class, 'markRead'])->name('accounts.messages.read');
 
     Route::get('kpis', [KpiController::class, 'index'])->name('kpis');
     Route::post('kpis/investor-link', [\App\Http\Controllers\InvestorController::class, 'generateLink'])->name('kpis.investor-link');

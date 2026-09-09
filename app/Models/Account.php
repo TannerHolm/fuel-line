@@ -35,6 +35,8 @@ class Account extends Model
             'pipeline_stage' => PipelineStage::class,
             'signup_source' => SignupSource::class,
             'next_action_date' => 'date',
+            'sms_opted_out_at' => 'datetime',
+            'sms_consent_at' => 'datetime',
         ];
     }
 
@@ -135,6 +137,16 @@ class Account extends Model
     public function checkIns(): HasMany
     {
         return $this->hasMany(CheckIn::class);
+    }
+
+    public function messages(): HasMany
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    public function smsOptedOut(): bool
+    {
+        return $this->sms_opted_out_at !== null;
     }
 
     public function buybackAgreements(): HasMany

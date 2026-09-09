@@ -50,6 +50,10 @@ class HandleInertiaRequests extends Middleware
                 'invite_link' => $request->session()->get('invite_link'),
                 'import_summary' => $request->session()->get('import_summary'),
             ],
+            // Nav badge; lazy so it refreshes with every Inertia visit and poll.
+            'unreadMessages' => fn () => $request->user()?->isFounder()
+                ? \App\Models\Message::query()->unreadInbound()->count()
+                : 0,
         ]);
     }
 }

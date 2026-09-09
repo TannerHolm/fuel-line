@@ -111,7 +111,7 @@ validation fail for the whole certificate.
 - `/` landing (public pricing + signup CTA; authed users redirect by role)
 - `/register` wholesale-partner signup (creates retailer user + pipeline account)
 - `/portal`, `/portal/order`, `/portal/report` — retailer portal (auth + retailer)
-- `/pipeline`, `/accounts*`, `/map`, `/kpis`, `/field` — founder app (auth + founder)
+- `/pipeline`, `/accounts*`, `/map`, `/kpis`, `/field`, `/messages` — founder app (auth + founder)
 - `/accounts/import` — bulk paste/CSV import of prospective locations (founder). Client parses and
   previews; server normalizes enums/state names, skips name+city duplicates, imports the rest as
   Qualified Prospects and reports per-row results. Registered BEFORE `accounts/{account}` in
@@ -154,7 +154,27 @@ any pre-July-2026 history is missing and KPIs understate it. (2) Real orders wer
 $10.00/unit (and $7.14 for MVP), i.e. the OLD price sheet, not the 90-Day Plan tiers
 ($9.00/$8.50/$8.00) seeded in `pricing_tiers` — reconcile before quoting anyone.
 
+Messaging (Sep 2026): two-way SMS (Twilio) + email (SendGrid) account chat. One append-only
+`messages` table (no conversations table — inbox state is derived); per-account thread on the
+account page + `/messages` inbox with nav unread badge (Inertia `usePoll`, 10s/15s — the app's
+first polling). Sends run `afterResponse` (no queue worker exists) and NEVER throw — failures
+land on the message row as status=failed with the provider error visible in the thread.
+Inbound: `POST /webhooks/twilio/inbound|status` (hand-rolled X-Twilio-Signature HMAC-SHA1 —
+fullUrl must be https behind the Forge proxy, add trustProxies if 401s) and
+`POST /webhooks/sendgrid/inbound/{token}` (Inbound Parse can't sign; unguessable URL token).
+Idempotent by unique `provider_message_id`. Inbound matches accounts by normalized phone
+(`App\Support\Phone::toE164` — accounts.phone is free text) or lowercased email; unmatched rows
+keep `account_id=null` and surface in the inbox. STOP/START keywords set/clear
+`accounts.sms_opted_out_at` and block in-app sends (TCPA). `fuelline:twilio-webhooks` points the
+messaging service at the app (like the Shopify one, nothing arrives until run). Twilio account
+"NightWatch by Freedom Fuel": number +1 385 350 8287 on messaging service MG53554cef…; A2P brand
+Approved but the CAMPAIGN IS FAILED (resubmit in console or sends fail w/ error 30034) and
+toll-free +1 844's verification was rejected — don't text from it. SendGrid needs: API key,
+authenticated sending domain, MX on the reply subdomain → mx.sendgrid.net, Inbound Parse entry
+pointing at the token URL. All keys in .env (`TWILIO_*`, `SENDGRID_*`); blank keys = sends fail
+visibly, webhooks reject.
+
 Not yet built: offline write queue for field mode (spec calls it non-optional before real field
-use), 7/14/30-day check-in reminders (scheduler + Twilio SMS), Shopify B2B Companies support (Plus
-only — importer currently uses tagged customers), case-study builder (§14), signed-agreement PDF
-rendering to S3, magic-link retailer auth.
+use), 7/14/30-day check-in reminders (scheduler + Twilio SMS — messaging plumbing now exists),
+Shopify B2B Companies support (Plus only — importer currently uses tagged customers), case-study
+builder (§14), signed-agreement PDF rendering to S3, magic-link retailer auth.

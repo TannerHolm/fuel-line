@@ -23,8 +23,12 @@ return Application::configure(basePath: dirname(__DIR__))
             'retailer' => \App\Http\Middleware\EnsureUserIsRetailer::class,
         ]);
 
-        // Shopify signs webhooks with HMAC, not a CSRF token.
-        $middleware->validateCsrfTokens(except: ['webhooks/shopify']);
+        // Provider webhooks authenticate with signatures/URL tokens, not CSRF.
+        $middleware->validateCsrfTokens(except: [
+            'webhooks/shopify',
+            'webhooks/twilio/*',
+            'webhooks/sendgrid/*',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

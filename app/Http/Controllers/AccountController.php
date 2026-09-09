@@ -74,6 +74,7 @@ class AccountController extends Controller
             'orders' => fn ($q) => $q->latest('date'),
             'checkIns' => fn ($q) => $q->with('user:id,name')->latest('date'),
             'stageTransitions' => fn ($q) => $q->with('user:id,name')->latest('created_at'),
+            'messages' => fn ($q) => $q->with('user:id,name')->latest()->limit(100),
         ]);
 
         $timeline = collect()
@@ -121,6 +122,17 @@ class AccountController extends Controller
                 ])->filter()->implode(' · '),
                 'by' => ($c->source->value === 'retailer' ? 'Retailer' : $c->user?->name),
             ]))
+            ->concat($account->messages->map(fn ($m) => [
+                'kind' => 'message',
+                'date' => $m->created_at->toDateString(),
+                'sort' => $m->created_at->timestamp + 4,
+                'title' => ($m->direction === \App\Enums\MessageDirection::Out ? 'Sent ' : 'Received ')
+                    .$m->channel->label().' — "'.\Illuminate\Support\Str::limit(trim($m->subject ?: $m->body), 60).'"',
+                'detail' => $m->status === \App\Enums\MessageStatus::Failed ? 'Failed: '.$m->error : null,
+                'by' => $m->direction === \App\Enums\MessageDirection::Out
+                    ? $m->user?->name
+                    : ($account->decision_maker ?: $m->from_address),
+            ]))
             ->sortByDesc('sort')
             ->values();
 
@@ -146,7 +158,24 @@ class AccountController extends Controller
                 'lost_reason' => $account->lost_reason,
                 'notes' => $account->notes,
                 'signup_source' => $account->signup_source->value,
+                'sms_opted_out' => $account->smsOptedOut(),
             ],
+            'thread' => $account->messages->reverse()->values()->map(fn ($m) => [
+                'id' => $m->id,
+                'channel' => $m->channel->value,
+                'channel_label' => $m->channel->label(),
+                'direction' => $m->direction->value,
+                'status' => $m->status->value,
+                'status_label' => $m->status->label(),
+                'subject' => $m->subject,
+                'body' => $m->body,
+                'error' => $m->error,
+                'by' => $m->direction === \App\Enums\MessageDirection::Out
+                    ? ($m->user?->name ?? 'Fuel Line')
+                    : ($account->decision_maker ?: $m->from_address),
+                'unread' => $m->direction === \App\Enums\MessageDirection::In && $m->read_at === null,
+                'created_at' => $m->created_at->toIso8601String(),
+            ]),
             'timeline' => $timeline,
             'stats' => [
                 'total_units' => $account->orders->sum('quantity'),

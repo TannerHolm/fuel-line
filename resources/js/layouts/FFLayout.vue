@@ -18,10 +18,13 @@ const initials = computed(() =>
 const founderTabs = [
     { label: 'Pipeline', href: '/pipeline', match: '/pipeline' },
     { label: 'Accounts', href: '/accounts', match: '/accounts' },
+    { label: 'Messages', href: '/messages', match: '/messages' },
     { label: 'Map', href: '/map', match: '/map' },
     { label: 'KPIs', href: '/kpis', match: '/kpis' },
     { label: 'Field', href: '/field', match: '/field' },
 ];
+
+const unread = computed(() => (page.props as any).unreadMessages ?? 0);
 
 const retailerTabs = [{ label: 'Portal', href: '/portal', match: '/portal' }];
 
@@ -79,6 +82,12 @@ const logout = () => router.post('/logout');
                     :class="isActive(tab.match) ? 'border-ff-red text-white' : 'border-transparent text-white/60 hover:text-white'"
                 >
                     {{ tab.label }}
+                    <span
+                        v-if="tab.href === '/messages' && unread > 0"
+                        class="ff-mono ml-1.5 rounded-full bg-ff-red px-1.5 py-0.5 text-[10px] leading-none text-white"
+                    >
+                        {{ unread }}
+                    </span>
                 </Link>
             </nav>
         </header>
