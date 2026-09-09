@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import FFLayout from '@/layouts/FFLayout.vue';
 import { Link, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 const page = usePage();
 
-const items = [
+const items = computed(() => [
     { title: 'Profile', href: '/settings/profile' },
     { title: 'Password', href: '/settings/password' },
-];
+    ...((page.props.auth as any)?.user?.role === 'founder' ? [{ title: 'Users', href: '/settings/users' }] : []),
+]);
 
 const isActive = (href: string) => page.url.startsWith(href);
 </script>

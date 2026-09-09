@@ -47,6 +47,8 @@ class HandleInertiaRequests extends Middleware
             ],
             'flash' => [
                 'success' => $request->session()->get('success'),
+                'invite_link' => $request->session()->get('invite_link'),
+                'import_summary' => $request->session()->get('import_summary'),
             ],
         ]);
     }
