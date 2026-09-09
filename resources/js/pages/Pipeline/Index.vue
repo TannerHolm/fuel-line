@@ -26,14 +26,16 @@ interface BoardColumn {
 
 const props = defineProps<{
     board: BoardColumn[];
-    filters: { retailer_type?: string; engine?: string; state?: string; q?: string };
+    filters: { retailer_type?: string; engine?: string; state?: string; owner?: string; q?: string };
     states: string[];
+    owners: { id: number; name: string }[];
 }>();
 
 const q = ref(props.filters.q ?? '');
 const retailerType = ref(props.filters.retailer_type ?? '');
 const engine = ref(props.filters.engine ?? '');
 const state = ref(props.filters.state ?? '');
+const owner = ref(props.filters.owner ?? '');
 
 function applyFilters() {
     router.get(
@@ -43,6 +45,7 @@ function applyFilters() {
             retailer_type: retailerType.value || undefined,
             engine: engine.value || undefined,
             state: state.value || undefined,
+            owner: owner.value || undefined,
         },
         { preserveState: true, preserveScroll: true },
     );
@@ -101,7 +104,12 @@ const typeShort: Record<string, string> = { service: 'SVC', performance: 'PERF',
                 <option value="">All states</option>
                 <option v-for="s in states" :key="s" :value="s">{{ s }}</option>
             </select>
-            <button v-if="q || retailerType || engine || state" type="button" class="ff-btn ff-btn-ghost" @click="q = ''; retailerType = ''; engine = ''; state = ''; applyFilters()">
+            <select v-model="owner" class="ff-input ff-input-sm w-full sm:w-auto" @change="applyFilters">
+                <option value="">All owners</option>
+                <option v-for="o in owners" :key="o.id" :value="String(o.id)">{{ o.name }}</option>
+                <option value="none">Unassigned</option>
+            </select>
+            <button v-if="q || retailerType || engine || state || owner" type="button" class="ff-btn ff-btn-ghost" @click="q = ''; retailerType = ''; engine = ''; state = ''; owner = ''; applyFilters()">
                 Clear
             </button>
         </div>

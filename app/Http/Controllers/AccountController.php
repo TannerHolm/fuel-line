@@ -20,11 +20,13 @@ class AccountController extends Controller
     public function index(Request $request): Response
     {
         $q = $request->string('q')->toString();
+        $owner = $request->string('owner')->toString();
 
         $accounts = Account::query()
             ->with('owner:id,name')
             ->withCount(['orders', 'checkIns'])
             ->search($q)
+            ->when($owner, fn ($query, $v) => $v === 'none' ? $query->whereNull('owner_id') : $query->where('owner_id', $v))
             ->orderBy('name')
             ->get()
             ->map(fn (Account $a) => [
@@ -44,6 +46,8 @@ class AccountController extends Controller
         return Inertia::render('Accounts/Index', [
             'accounts' => $accounts,
             'q' => $q,
+            'owner' => $owner,
+            'owners' => User::where('role', 'founder')->orderBy('name')->get(['id', 'name']),
         ]);
     }
 

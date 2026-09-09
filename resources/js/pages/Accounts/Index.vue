@@ -17,10 +17,12 @@ interface AccountRow {
     next_action_date: string | null;
 }
 
-const props = defineProps<{ accounts: AccountRow[]; q: string }>();
+const props = defineProps<{ accounts: AccountRow[]; q: string; owner: string; owners: { id: number; name: string }[] }>();
 
 const q = ref(props.q ?? '');
-const search = () => router.get('/accounts', { q: q.value || undefined }, { preserveState: true });
+const owner = ref(props.owner ?? '');
+const search = () =>
+    router.get('/accounts', { q: q.value || undefined, owner: owner.value || undefined }, { preserveState: true });
 
 const stageColor = (stage: string) =>
     stage === 'lost'
@@ -40,11 +42,20 @@ const stageColor = (stage: string) =>
                 <h1 class="ff-display text-4xl">Accounts</h1>
                 <p class="mt-1.5 text-white/[0.55]">{{ accounts.length }} retailers on record.</p>
             </div>
-            <Link href="/accounts/create" class="ff-btn ff-btn-primary no-underline">New account</Link>
+            <div class="flex items-center gap-3">
+                <Link href="/accounts/import" class="ff-btn ff-btn-ghost no-underline">Import</Link>
+                <Link href="/accounts/create" class="ff-btn ff-btn-primary no-underline">New account</Link>
+            </div>
         </div>
 
-        <div class="mb-4">
+        <div class="mb-4 grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:items-center sm:gap-3">
             <input v-model="q" type="text" placeholder="Search name, city, contact" class="ff-input ff-input-sm w-full sm:w-72" @keyup.enter="search" />
+            <select v-model="owner" class="ff-input ff-input-sm w-full sm:w-auto" @change="search">
+                <option value="">All owners</option>
+                <option v-for="o in owners" :key="o.id" :value="String(o.id)">{{ o.name }}</option>
+                <option value="none">Unassigned</option>
+            </select>
+            <button v-if="q || owner" type="button" class="ff-btn ff-btn-ghost" @click="q = ''; owner = ''; search()">Clear</button>
         </div>
 
         <div class="ff-card overflow-x-auto">

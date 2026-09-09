@@ -12,13 +12,14 @@ class PipelineController extends Controller
 {
     public function index(Request $request): Response
     {
-        $filters = $request->only(['retailer_type', 'engine', 'state', 'q']);
+        $filters = $request->only(['retailer_type', 'engine', 'state', 'owner', 'q']);
 
         $accounts = Account::query()
             ->with(['owner:id,name', 'stageTransitions' => fn ($q) => $q->latest('id')->limit(1)])
             ->when($filters['retailer_type'] ?? null, fn ($q, $v) => $q->where('retailer_type', $v))
             ->when($filters['engine'] ?? null, fn ($q, $v) => $q->where('acquisition_engine', $v))
             ->when($filters['state'] ?? null, fn ($q, $v) => $q->where('state', $v))
+            ->when($filters['owner'] ?? null, fn ($q, $v) => $v === 'none' ? $q->whereNull('owner_id') : $q->where('owner_id', $v))
             ->search($filters['q'] ?? null)
             ->byNextAction()
             ->get();
@@ -49,6 +50,7 @@ class PipelineController extends Controller
             'board' => $board,
             'filters' => $filters,
             'states' => Account::query()->whereNotNull('state')->distinct()->orderBy('state')->pluck('state'),
+            'owners' => \App\Models\User::where('role', 'founder')->orderBy('name')->get(['id', 'name']),
         ]);
     }
 }
