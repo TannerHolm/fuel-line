@@ -55,6 +55,8 @@ class FuelLineFlowsTest extends TestCase
             'city' => 'St. George',
             'state' => 'ut',
             'retailer_type' => 'performance',
+            'phone' => '(435) 555-0188',
+            'sms_consent' => true,
         ]);
 
         $response->assertRedirect('/portal');
@@ -62,6 +64,7 @@ class FuelLineFlowsTest extends TestCase
         $account = Account::where('name', 'Bluff Street Nutrition')->firstOrFail();
         $this->assertSame('self_service', $account->signup_source->value);
         $this->assertSame('UT', $account->state);
+        $this->assertNotNull($account->sms_consent_at);
         $this->assertSame('qualified_prospect', $account->pipeline_stage->value);
         $this->assertSame(1, $account->stageTransitions()->count());
 

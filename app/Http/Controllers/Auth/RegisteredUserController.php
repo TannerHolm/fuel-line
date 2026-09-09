@@ -44,6 +44,7 @@ class RegisteredUserController extends Controller
             'state' => 'nullable|string|size:2',
             'retailer_type' => ['nullable', Rule::enum(RetailerType::class)],
             'phone' => 'nullable|string|max:30',
+            'sms_consent' => 'nullable|boolean',
         ]);
 
         $user = DB::transaction(function () use ($request) {
@@ -55,6 +56,7 @@ class RegisteredUserController extends Controller
                 'decision_maker' => $request->name,
                 'phone' => $request->phone,
                 'email' => $request->email,
+                'sms_consent_at' => $request->boolean('sms_consent') && filled($request->phone) ? now() : null,
                 'lead_source' => 'online',
                 'acquisition_engine' => 'seeded',
                 'pipeline_stage' => 'qualified_prospect',
