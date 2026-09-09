@@ -30,10 +30,10 @@ import { Head, Link } from '@inertiajs/vue3';
                 <section>
                     <h2 class="ff-label mb-2 text-ff-tan-light">Text messaging</h2>
                     <p>
-                        If you opt in to text messages, we use your phone number to send order and account updates and to
-                        answer questions you text us. Message frequency varies. Message and data rates may apply. Reply
-                        STOP at any time to stop receiving texts, or HELP for help. Opting out of texts does not affect
-                        your wholesale account.
+                        If you opt in to text messages, we use your phone number to send order and account updates,
+                        occasional promotional offers, and replies to questions you text us. Message frequency varies.
+                        Message and data rates may apply. Reply STOP at any time to stop receiving texts, or HELP for
+                        help. Opting out of texts does not affect your wholesale account.
                     </p>
                 </section>
 

@@ -29,10 +29,11 @@ import { Head, Link } from '@inertiajs/vue3';
                 <section>
                     <h2 class="ff-label mb-2 text-ff-tan-light">SMS program — Freedom Fuel Wholesale Updates</h2>
                     <p>
-                        Wholesale partners can opt in to receive text messages from Freedom Fuel about their account:
-                        order confirmations, delivery updates, restock check-ins, and replies to questions they text us.
-                        You opt in by checking the SMS consent box when creating a wholesale account (or by asking us in
-                        writing to text you). Consent is not a condition of purchase.
+                        Wholesale partners can opt in to receive text messages from Freedom Fuel about their account —
+                        order confirmations, delivery updates, restock check-ins, and replies to questions they text us —
+                        along with occasional promotional offers such as new products or reorder specials. You opt in by
+                        checking the SMS consent box when creating a wholesale account (or by asking us in writing to
+                        text you). Consent is not a condition of purchase.
                     </p>
                     <ul class="mt-3 flex list-disc flex-col gap-1.5 pl-5">
                         <li>Message frequency varies with your account activity.</li>

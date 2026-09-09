@@ -78,9 +78,9 @@ const submit = () => {
             <label class="flex cursor-pointer items-start gap-3">
                 <input v-model="form.sms_consent" type="checkbox" class="mt-1 h-4 w-4 flex-none accent-white" />
                 <span class="text-[13px] leading-relaxed text-white/[0.55]">
-                    Text me order and account updates from Freedom Fuel at the number above. Message frequency varies,
-                    message and data rates may apply. Reply STOP to opt out, HELP for help. Consent is not a condition
-                    of purchase. See our
+                    Text me order updates, account service, and occasional offers from Freedom Fuel at the number
+                    above. Message frequency varies, message and data rates may apply. Reply STOP to opt out, HELP for
+                    help. Consent is not a condition of purchase. See our
                     <Link href="/privacy" class="text-white/[0.72] underline">Privacy Policy</Link> and
                     <Link href="/terms" class="text-white/[0.72] underline">SMS Terms</Link>.
                 </span>
