@@ -33,8 +33,11 @@ Herd at http://fuel-line.test. Tests run PHPUnit on sqlite `:memory:`.
   Terms text + version hash come from `config/fuelline.php` — revising the text creates a new
   version without invalidating old signatures.
 - **Roles**: `founder` / `retailer` / `investor` on `users.role`. Retailers are scoped to their one
-  `account_id`; public registration always creates retailers. Founders are seeded, never
-  self-registered. Investor access is signed-URL only (`/scorecard`).
+  `account_id`; public registration always creates retailers. Founders are never self-registered:
+  they come from `fuelline:make-founder` or from a founder using `/settings/users` (founder-only
+  user admin — creates founder/retailer logins with a one-time set-password link, never a typed
+  password; retailer logins there must pick an account). Investor access is signed-URL only
+  (`/scorecard`) and has no user row.
 
 ## Design system (App Style Guide is law)
 
@@ -109,6 +112,11 @@ validation fail for the whole certificate.
 - `/register` wholesale-partner signup (creates retailer user + pipeline account)
 - `/portal`, `/portal/order`, `/portal/report` — retailer portal (auth + retailer)
 - `/pipeline`, `/accounts*`, `/map`, `/kpis`, `/field` — founder app (auth + founder)
+- `/accounts/import` — bulk paste/CSV import of prospective locations (founder). Client parses and
+  previews; server normalizes enums/state names, skips name+city duplicates, imports the rest as
+  Qualified Prospects and reports per-row results. Registered BEFORE `accounts/{account}` in
+  web.php — keep it there or `import` gets swallowed by the model binding.
+- `/settings/users` — founder-only user admin (see Roles above)
 - `/scorecard` — investor view, `signed` URL required (generate from /kpis)
 
 ## Roadmap state (per spec §10)
