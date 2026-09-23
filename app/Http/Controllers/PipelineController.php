@@ -49,6 +49,7 @@ class PipelineController extends Controller
         return Inertia::render('Pipeline/Index', [
             'board' => $board,
             'filters' => $filters,
+            'retailerTypes' => \App\Enums\RetailerType::options(),
             'states' => Account::query()->whereNotNull('state')->distinct()->orderBy('state')->pluck('state'),
             'owners' => \App\Models\User::where('role', 'founder')->orderBy('name')->get(['id', 'name']),
         ]);

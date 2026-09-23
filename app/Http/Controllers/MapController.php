@@ -39,6 +39,7 @@ class MapController extends Controller
             ]),
             'unlocatedCount' => $accounts->count() - $located->count(),
             'filters' => $filters,
+            'retailerTypes' => \App\Enums\RetailerType::options(),
         ]);
     }
 }

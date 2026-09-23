@@ -24,6 +24,7 @@ interface MapAccount {
 const props = defineProps<{
     accounts: MapAccount[];
     unlocatedCount: number;
+    retailerTypes: { value: string; label: string }[];
     filters: { retailer_type?: string; engine?: string };
 }>();
 
@@ -151,9 +152,7 @@ onBeforeUnmount(() => {
             <div class="grid w-full grid-cols-2 gap-2.5 sm:flex sm:w-auto sm:gap-3">
                 <select v-model="retailerType" class="ff-input ff-input-sm w-full sm:w-auto" @change="applyFilters">
                     <option value="">All types</option>
-                    <option value="service">Service</option>
-                    <option value="performance">Performance</option>
-                    <option value="convenience">Convenience</option>
+                    <option v-for="t in retailerTypes" :key="t.value" :value="t.value">{{ t.label }}</option>
                 </select>
                 <select v-model="engine" class="ff-input ff-input-sm w-full sm:w-auto" @change="applyFilters">
                     <option value="">Both engines</option>

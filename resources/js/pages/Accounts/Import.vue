@@ -194,7 +194,9 @@ const submit = () => {
                 <div class="ff-label-sm text-ff-tan-light">Paste rows</div>
                 <p class="mt-2 text-[13px] text-white/[0.55]">
                     First row must be headers. Recognized columns: Name, City, State, Type, Contact, Phone, Email, Source, Notes —
-                    only Name is required. Copying cells straight out of Excel or Sheets works.
+                    only Name is required. Type is one of {{ options.retailer_types.map((t) => t.label).join(', ') }}
+                    (common spellings like Convenience/Gas, Fitness, or Smoke Shop are understood). Copying cells straight out
+                    of Excel or Sheets works.
                 </p>
 
                 <div class="mt-3 flex flex-wrap items-center gap-3">

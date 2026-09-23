@@ -26,6 +26,7 @@ interface BoardColumn {
 
 const props = defineProps<{
     board: BoardColumn[];
+    retailerTypes: { value: string; label: string }[];
     filters: { retailer_type?: string; engine?: string; state?: string; owner?: string; q?: string };
     states: string[];
     owners: { id: number; name: string }[];
@@ -67,7 +68,7 @@ function onDrop(stage: string) {
     router.patch(`/accounts/${id}/stage`, { stage }, { preserveScroll: true });
 }
 
-const typeShort: Record<string, string> = { service: 'SVC', performance: 'PERF', convenience: 'CONV' };
+const typeShort: Record<string, string> = { service: 'SVC', performance: 'PERF', convenience: 'CONV', gym: 'GYM', smoke_vape: 'VAPE', veteran_retail: 'VET' };
 </script>
 
 <template>
@@ -91,9 +92,7 @@ const typeShort: Record<string, string> = { service: 'SVC', performance: 'PERF',
             />
             <select v-model="retailerType" class="ff-input ff-input-sm w-full sm:w-auto" @change="applyFilters">
                 <option value="">All types</option>
-                <option value="service">Service</option>
-                <option value="performance">Performance</option>
-                <option value="convenience">Convenience</option>
+                <option v-for="t in retailerTypes" :key="t.value" :value="t.value">{{ t.label }}</option>
             </select>
             <select v-model="engine" class="ff-input ff-input-sm w-full sm:w-auto" @change="applyFilters">
                 <option value="">Both engines</option>

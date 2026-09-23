@@ -85,7 +85,7 @@ class AccountImportController extends Controller
             $type = $this->resolveEnum(RetailerType::cases(), $raw['retailer_type'] ?? null);
 
             if ($type === false) {
-                $failed[] = ['line' => $line, 'name' => $name, 'reason' => "Unknown retailer type '".trim((string) $raw['retailer_type'])."'. Use Service, Performance, or Convenience."];
+                $failed[] = ['line' => $line, 'name' => $name, 'reason' => "Unknown retailer type '".trim((string) $raw['retailer_type'])."'. Use one of: ".collect(RetailerType::cases())->map->label()->join(', ').'.'];
 
                 continue;
             }
@@ -173,7 +173,7 @@ class AccountImportController extends Controller
         }
 
         foreach ($cases as $case) {
-            $candidates = [$case->value, $case->label()];
+            $candidates = [$case->value, $case->label(), ...(method_exists($case, 'aliases') ? $case->aliases() : [])];
 
             foreach ($candidates as $candidate) {
                 if (preg_replace('/[^a-z0-9]/', '', mb_strtolower($candidate)) === $needle) {

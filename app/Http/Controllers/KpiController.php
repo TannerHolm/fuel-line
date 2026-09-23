@@ -25,6 +25,7 @@ class KpiController extends Controller
             'kpis' => $kpis->compute($filters),
             'velocity' => $kpis->velocityLeaderboard($filters),
             'filters' => $filters,
+            'retailerTypes' => \App\Enums\RetailerType::options(),
             'trend' => KpiSnapshot::where('segment_key', $segmentKey)
                 ->orderBy('week_of')
                 ->get()

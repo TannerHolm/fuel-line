@@ -100,6 +100,25 @@ class AccountImportTest extends TestCase
         $this->assertSame(1, session('import_summary')['created']);
     }
 
+    public function test_spreadsheet_spellings_of_retailer_type_resolve_to_enum_cases()
+    {
+        $this->actingAs($this->founder())->post('/accounts/import', [
+            'rows' => [
+                ['name' => 'The Border Store', 'city' => 'St. George', 'state' => 'UT', 'retailer_type' => 'Convenience/Gas'],
+                ['name' => 'CrossFit Zion', 'city' => 'St. George', 'state' => 'UT', 'retailer_type' => 'Gym'],
+                ['name' => 'Hit It Up Smoke Shop', 'city' => 'St. George', 'state' => 'UT', 'retailer_type' => 'Smoke/Vape Shop'],
+                ['name' => "Rowdy's Range", 'city' => 'St. George', 'state' => 'UT', 'retailer_type' => 'Veteran-Owned Retail'],
+            ],
+        ]);
+
+        $summary = session('import_summary');
+        $this->assertSame(4, $summary['created'], json_encode($summary['failed']));
+        $this->assertSame('convenience', Account::where('name', 'The Border Store')->value('retailer_type')->value);
+        $this->assertSame('gym', Account::where('name', 'CrossFit Zion')->value('retailer_type')->value);
+        $this->assertSame('smoke_vape', Account::where('name', 'Hit It Up Smoke Shop')->value('retailer_type')->value);
+        $this->assertSame('veteran_retail', Account::where('name', "Rowdy's Range")->value('retailer_type')->value);
+    }
+
     public function test_bad_rows_fail_with_reasons_and_good_rows_still_import()
     {
         $this->actingAs($this->founder())->post('/accounts/import', [
